@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <title>Расстояние между двумя прямыми</title>
+    </head>
+    <body style="overflow: hidden; margin: 0;">
+        <canvas id="myCanvas" width="2000" height="2000"
+                style="background-color:#eee;">
+            Ваш браузер не поддерживает Canvas
+        </canvas>
+        <script>
+            let canvas = document.getElementById("myCanvas"),
+                context = canvas.getContext("2d");
+            let mouse = {x: 0, y: 0};
+            let draw = false;
+            let lineNum = 0;
+            let xs1 = [];
+            let xs2 = [];
+            let ys1 = [];
+            let ys2 = [];
+
+            canvas.addEventListener("mousedown", function(e){
+                    mouse.x = e.pageX - this.offsetLeft;
+                    mouse.y = e.pageY - this.offsetTop;
+                    draw = true;
+                    context.beginPath();
+                    context.moveTo(mouse.x, mouse.y);
+                    lineNum++;
+            });
+
+            canvas.addEventListener("mousemove", function(e){
+                if(draw===true){
+                    mouse.x = e.pageX - this.offsetLeft;
+                    mouse.y = e.pageY - this.offsetTop;
+                    context.lineTo(mouse.x, mouse.y);
+                    context.stroke();
+                    pushCoordinats();
+                }
+            });
+
+            canvas.addEventListener("mouseup", function(e){
+                    mouse.x = e.pageX - this.offsetLeft;
+                    mouse.y = e.pageY - this.offsetTop;
+                    context.lineTo(mouse.x, mouse.y);
+                    context.stroke();
+                    context.closePath();
+                    draw = false;
+                    if (lineNum === 2){
+                        let minimalDistance = Infinity;
+                        if (lineNum === 2){
+                            for (let i = 0; i < xs1.length; i++) {
+                                let temp = Math.sqrt(Math.pow(xs1[i] - xs2[i], 2) + Math.pow(ys1[i] - ys2[i], 2));
+                                if (minimalDistance > temp){
+                                    minimalDistance = temp;
+                                }
+                            }
+                        }
+
+                        alert("Расстояние между линиями: " + " " + Math.ceil(minimalDistance) + "px.");
+                    }
+
+
+            });
+
+            function pushCoordinats(){
+                if (lineNum === 1){
+                    xs1.push(mouse.x);
+                    ys1.push(mouse.y);
+                } else {
+                    xs2.push(mouse.x);
+                    ys2.push(mouse.y);
+                }
+            }
+        </script>
+    </body>
+</html>
